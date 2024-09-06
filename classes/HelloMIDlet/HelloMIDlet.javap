@@ -1,0 +1,34 @@
+public class HelloMIDlet extends javax.microedition.midlet.MIDlet {
+  public HelloMIDlet();
+    Code:
+       0: aload_0
+       1: invokespecial #11                 // Method javax/microedition/midlet/MIDlet."<init>":()V
+       4: aload_0
+       5: new           #4                  // class javax/microedition/lcdui/Form
+       8: dup
+       9: ldc           #1                  // String Hello World
+      11: invokespecial #10                 // Method javax/microedition/lcdui/Form."<init>":(Ljava/lang/String;)V
+      14: putfield      #7                  // Field a:Ljavax/microedition/lcdui/Form;
+      17: return
+
+  protected void startApp();
+    Code:
+       0: aload_0
+       1: aload_0
+       2: invokestatic  #8                  // Method javax/microedition/lcdui/Display.getDisplay:(Ljavax/microedition/midlet/MIDlet;)Ljavax/microedition/lcdui/Display;
+       5: putfield      #6                  // Field a:Ljavax/microedition/lcdui/Display;
+       8: aload_0
+       9: getfield      #6                  // Field a:Ljavax/microedition/lcdui/Display;
+      12: aload_0
+      13: getfield      #7                  // Field a:Ljavax/microedition/lcdui/Form;
+      16: invokevirtual #9                  // Method javax/microedition/lcdui/Display.setCurrent:(Ljavax/microedition/lcdui/Displayable;)V
+      19: return
+
+  protected void pauseApp();
+    Code:
+       0: return
+
+  protected void destroyApp(boolean);
+    Code:
+       0: return
+}

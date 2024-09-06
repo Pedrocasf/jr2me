@@ -1,0 +1,30 @@
+pub enum BaseTypes {
+    JUndefiend0,
+    JString(u16, String),
+    JUndefined1,
+    JUndefined2,
+    JInteger(u32),
+    JFloat(f32),
+    JLong(u64),
+    JDouble(f64),
+    JClassRef(u16),
+    JStrRef(u16),
+    JFieldRef(u16, u16),
+    JMethodRef(u16, u16),
+    JInterfaceRef(u16, u16),
+    JNameTypeDescriptor(u16, u16),
+}
+impl BaseTypes {}
+/*
+    String=1,
+    Integer=3,
+    Float=4,
+    Long=5,
+    Double=6,
+    ClassRef=7,
+    StrRef=8,
+    FieldRef=9,
+    MethodRef=10,
+    InterfaceRef=11,
+    NameTypeDescriptor=12,
+*/
