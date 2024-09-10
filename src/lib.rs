@@ -14,6 +14,7 @@ mod tests {
     //use crate::class_loader; //, virtual_machine};
     //use crate::virtual_machine;
     //use class_loader::class::Class;
+    use crate::class_loader::Class;
     #[cfg(feature = "log")]
     use log::trace;
     #[cfg(feature = "std")]
@@ -29,9 +30,9 @@ mod tests {
         let main_class_data = std::fs::read(main_class_path).expect("CLASS FILE NOT FOUND");
         //#[cfg(feature = "log")]
         //trace!("{:#X?}", main_class_data);
-        let main_class_obj = Class::new();
-        //#[cfg(feature = "log")]
-        //trace!("{:#?}", main_class_obj);
+        let main_class_obj = Class::new(main_class_data);
+
+        println!("{:#x?}", main_class_obj);
         //let mut virtual_machine = virtual_machine::VirtualMachine::new(main_class_obj);
         //virtual_machine.run();
         Ok(())
