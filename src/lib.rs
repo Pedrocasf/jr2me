@@ -15,7 +15,7 @@ mod tests {
     //use crate::class_loader; //, virtual_machine};
     //use crate::virtual_machine;
     //use class_loader::class::Class;
-    use crate::class_loader::Class;
+    use crate::{class_loader::Class, class_runner::RunnableClass};
     #[cfg(feature = "log")]
     use log::trace;
     #[cfg(feature = "std")]
@@ -34,6 +34,8 @@ mod tests {
         let main_class_obj = Class::new(main_class_data);
 
         println!("{:#?}", main_class_obj);
+        let mut runnable = RunnableClass::new(&main_class_obj);
+        runnable.run_method(&"<init>".to_owned(), &"()V".to_owned(), (&main_class_obj).get_constant_pool(), main_class_obj.get_class_idx(),  None);
         //let mut virtual_machine = virtual_machine::VirtualMachine::new(main_class_obj);
         //virtual_machine.run();
         Ok(())

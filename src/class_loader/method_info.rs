@@ -27,4 +27,13 @@ impl MethodInfo {
     pub fn get_attribute_code(&self) -> Box<CodeAttribute> {
         Box::new(self.attribute_pool.get_attribute_code()[0].clone())
     }
+    pub fn get_access_flags(&self) -> u16{
+        self.access_flags
+    }
+    pub fn get_name(&self) -> String{
+        self.name.clone()
+    }
+    pub fn get_descriptor(&self) -> String{
+        self.descriptor.clone()
+    }
 }

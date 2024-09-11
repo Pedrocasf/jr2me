@@ -80,4 +80,7 @@ impl Class {
     pub fn get_methods(&self) -> &[MethodInfo] {
         &self.method_pool.get_methods()
     }
+    pub fn get_class_idx(&self)->u16{
+        self.this_class_idx
+    }
 }

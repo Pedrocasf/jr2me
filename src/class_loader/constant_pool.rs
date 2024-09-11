@@ -83,6 +83,21 @@ impl ConstantPool {
             );
         }
     }
+    pub fn get_str_ref_of_index(&self, index:u16)-> u16{
+        if let BaseTypes::JStrRef(str_ref) = self.pool[index as usize].clone(){
+            return str_ref;
+        } else {
+            panic!(
+                "Constant Pool item of index {:} is not a valid JStrRef",
+                index
+            );
+        }
+    }
+    pub fn solve_str_ref_of_index(&self, index:u16) -> String{
+        let str_idx = self.get_str_ref_of_index(index);
+        let str = self.get_string_of_index(str_idx);
+        return str;
+    }
     pub fn solve_method_ref_of_index(&self, index: u16) -> (String, String, String) {
         let (class_idx, name_type_idx) = self.get_method_ref_of_index(index);
         let class_name_idx = self.get_class_ref_of_index(class_idx);
