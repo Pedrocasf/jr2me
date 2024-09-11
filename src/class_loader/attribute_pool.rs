@@ -17,7 +17,7 @@ impl AttributePool {
         let info = info.into_boxed_slice();
         (AttributePool { size, info }, length as u32)
     }
-    pub fn get_attribute_code(&self) -> Vec<CodeAttribute> {
+    pub fn get_attribute_code(&self) -> Box<[CodeAttribute]> {
         self.info
             .iter()
             .filter_map(|attr| {

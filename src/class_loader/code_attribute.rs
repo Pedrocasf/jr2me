@@ -33,7 +33,7 @@ impl CodeAttribute {
     pub fn get_max_locals(&self) -> u16 {
         self.max_locals
     }
-    pub fn get_bytecode(&self) -> Vec<Bytecode> {
+    pub fn get_bytecode(&self) -> Box<[Bytecode]> {
         self.code.get_bytecode()
     }
 }

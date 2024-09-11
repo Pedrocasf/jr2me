@@ -24,7 +24,7 @@ impl MethodInfo {
             size + 6,
         )
     }
-    pub fn get_attribute_code(&self) -> Vec<CodeAttribute> {
-        self.attribute_pool.get_attribute_code()
+    pub fn get_attribute_code(&self) -> Box<CodeAttribute> {
+        Box::new(self.attribute_pool.get_attribute_code()[0].clone())
     }
 }
