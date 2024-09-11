@@ -9,7 +9,7 @@ pub struct CodeAttribute {
 }
 impl CodeAttribute {
     pub fn new(data: &[u8], const_pool: &ConstantPool) -> (CodeAttribute, u32) {
-        let (code_pool, sz_code) = CodePool::new(&data[4..]);
+        let (code_pool, sz_code) = CodePool::new(&data[4..], const_pool);
         let (exception_table, sz_exception) =
             ExceptionTablePool::new(&data[sz_code as usize + 4..]);
         let (attr_pool, sz_attr) = AttributePool::new(
@@ -26,5 +26,14 @@ impl CodeAttribute {
             },
             sz_code + sz_exception + sz_attr + 4,
         )
+    }
+    pub fn get_max_stack(&self) -> u16 {
+        self.max_stack
+    }
+    pub fn get_max_locals(&self) -> u16 {
+        self.max_locals
+    }
+    pub fn get_bytecode(&self) -> Vec<Bytecode> {
+        self.code.get_bytecode()
     }
 }

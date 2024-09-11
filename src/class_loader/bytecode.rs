@@ -1,3 +1,5 @@
+use super::ConstantPool;
+
 #[derive(Debug, Clone)]
 pub enum Bytecode {
     OpNop,
@@ -7,18 +9,18 @@ pub enum Bytecode {
     OpALoad0,
     OpDup,
     OpReturn,
-    OpGetField(u16),
-    OpPutField(u16),
-    OpInvokeVirtual(u16),
-    OpInvokeSpecial(u16),
-    OpInvokeStatic(u16),
-    OpNew(u16),
+    OpGetField(String, String, String),
+    OpPutField(String, String, String),
+    OpInvokeVirtual(String, String, String),
+    OpInvokeSpecial(String, String, String),
+    OpInvokeStatic(String, String, String),
+    OpNew(String),
 }
-impl Bytecode{
-    pub fn new(data:&[u8])->(Bytecode, u32){
+impl Bytecode {
+    pub fn new(data: &[u8], constant_pool: &ConstantPool) -> (Bytecode, u32) {
         use ByteCodeID::*;
         use Bytecode::*;
-        match data[0].try_into().unwrap(){
+        match data[0].try_into().unwrap() {
             IdNop => return (OpNop, 1),
             IdAConstNull => return (OpAConstNull, 1),
             IdFConst0 => return (OpFConst0, 1),
@@ -26,18 +28,42 @@ impl Bytecode{
             IdALoad0 => return (OpALoad0, 1),
             IdDup => return (OpDup, 1),
             IdReturn => return (OpReturn, 1),
-            IdGetField => return (OpGetField(u16::from_be_bytes(data[1..3].try_into().unwrap())), 3),
-            IdPutField => return(OpPutField(u16::from_be_bytes(data[1..3].try_into().unwrap())), 3),
-            IdInvokeVirtual => return(OpInvokeVirtual(u16::from_be_bytes(data[1..3].try_into().unwrap())), 3),
-            IdInvokeSpecial => return (OpInvokeSpecial(u16::from_be_bytes(data[1..3].try_into().unwrap())), 3),
-            IdInvokeStatic => return (OpInvokeStatic(u16::from_be_bytes(data[1..3].try_into().unwrap())), 3),
-            IdNew => return (OpNew(u16::from_be_bytes(data[1..3].try_into().unwrap())), 3),
+            IdGetField => {
+                let (class_name, field_name, field_type) = constant_pool
+                    .solve_field_ref_of_index(u16::from_be_bytes(data[1..3].try_into().unwrap()));
+                return (OpGetField(class_name, field_name, field_type), 3);
+            }
+            IdPutField => {
+                let (class_name, field_name, field_type) = constant_pool
+                    .solve_field_ref_of_index(u16::from_be_bytes(data[1..3].try_into().unwrap()));
+                return (OpPutField(class_name, field_name, field_type), 3);
+            }
+            IdInvokeVirtual => {
+                let (class_name, method_name, method_type) = constant_pool
+                    .solve_method_ref_of_index(u16::from_be_bytes(data[1..3].try_into().unwrap()));
+                return (OpInvokeVirtual(class_name, method_name, method_type), 3);
+            }
+            IdInvokeSpecial => {
+                let (class_name, method_name, method_type) = constant_pool
+                    .solve_method_ref_of_index(u16::from_be_bytes(data[1..3].try_into().unwrap()));
+                return (OpInvokeSpecial(class_name, method_name, method_type), 3);
+            }
+            IdInvokeStatic => {
+                let (class_name, method_name, method_type) = constant_pool
+                    .solve_method_ref_of_index(u16::from_be_bytes(data[1..3].try_into().unwrap()));
+                return (OpInvokeStatic(class_name, method_name, method_type), 3);
+            }
+            IdNew => {
+                let class_name = constant_pool
+                    .solve_class_ref(u16::from_be_bytes(data[1..3].try_into().unwrap()));
+                return (OpNew(class_name), 3);
+            }
         }
     }
 }
 #[derive(Debug, Clone, Ord, PartialOrd, PartialEq, Eq, Copy)]
 #[repr(u8)]
-pub enum ByteCodeID{
+pub enum ByteCodeID {
     IdNop = 0x00,
     IdAConstNull = 0x01,
     IdFConst0 = 0x0B,
@@ -70,7 +96,7 @@ impl TryFrom<u8> for ByteCodeID {
             0xB7 => Ok(IdInvokeSpecial),
             0xB8 => Ok(IdInvokeStatic),
             0xBB => Ok(IdNew),
-            _ => Err(format!("Op:{:x} not implemented", value))
+            _ => Err(format!("Op:{:x} not implemented", value)),
         }
     }
 }

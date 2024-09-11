@@ -1,4 +1,4 @@
-use super::{AttributePool, ConstantPool};
+use super::{AttributePool, CodeAttribute, CodePool, ConstantPool};
 #[derive(Debug, Clone)]
 pub struct MethodInfo {
     access_flags: u16,
@@ -23,5 +23,8 @@ impl MethodInfo {
             },
             size + 6,
         )
+    }
+    pub fn get_attribute_code(&self) -> Vec<CodeAttribute> {
+        self.attribute_pool.get_attribute_code()
     }
 }

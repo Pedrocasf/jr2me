@@ -3,7 +3,7 @@ use super::MethodInfo;
 #[derive(Debug, Clone)]
 pub struct MethodPool {
     size: u16,
-    methods: Vec<MethodInfo>,
+    methods: Box<[MethodInfo]>,
 }
 impl MethodPool {
     pub fn new(data: &[u8], const_pool: &ConstantPool) -> (MethodPool, usize) {
@@ -15,6 +15,10 @@ impl MethodPool {
             methods.push(m);
             idx += sz as usize;
         }
+        let methods = methods.into_boxed_slice();
         (MethodPool { size, methods }, idx)
+    }
+    pub fn get_methods(&self) -> &[MethodInfo] {
+        &self.methods
     }
 }

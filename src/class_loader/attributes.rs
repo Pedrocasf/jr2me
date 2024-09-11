@@ -3,6 +3,7 @@ use crate::{base_types::BaseTypes, class_loader::CodePool};
 #[derive(Debug, Clone)]
 pub enum Attributes {
     Code(CodeAttribute),
+    Unknown,
 }
 impl Attributes {
     pub fn new(data: &[u8], const_pool: &ConstantPool) -> (Attributes, usize) {

@@ -3,7 +3,7 @@ use super::FieldInfo;
 #[derive(Debug, Clone)]
 pub struct FieldPool {
     size: u16,
-    fields: Vec<FieldInfo>,
+    fields: Box<[FieldInfo]>,
 }
 impl FieldPool {
     pub fn new(data: &[u8], const_pool: &ConstantPool) -> (FieldPool, usize) {
@@ -15,6 +15,7 @@ impl FieldPool {
             fields.push(f);
             idx += sz as usize;
         }
+        let fields = fields.into_boxed_slice();
         (FieldPool { size, fields }, idx as usize)
     }
 }

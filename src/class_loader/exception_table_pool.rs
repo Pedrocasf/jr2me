@@ -2,7 +2,7 @@ use super::Exception;
 #[derive(Debug, Clone)]
 pub struct ExceptionTablePool {
     length: u16,
-    exceptions_table: Vec<Exception>,
+    exceptions_table: Box<[Exception]>,
 }
 impl ExceptionTablePool {
     pub fn new(data: &[u8]) -> (ExceptionTablePool, u32) {
@@ -11,6 +11,7 @@ impl ExceptionTablePool {
         for i in 0..(length as usize) {
             exceptions_table.push(Exception::new(&data[2 + (i * 8)..10 + (i * 8)]));
         }
+        let exceptions_table = exceptions_table.into_boxed_slice();
         (
             ExceptionTablePool {
                 length,

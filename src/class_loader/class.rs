@@ -6,8 +6,8 @@ use super::ConstantPool;
 use super::FieldInfo;
 use super::FieldPool;
 use super::InterfacePool;
+use super::MethodInfo;
 use super::MethodPool;
-
 #[derive(Debug, Clone)]
 pub struct Class {
     magic: u32,
@@ -73,5 +73,11 @@ impl Class {
             attribute_pool,
         };
         return c;
+    }
+    pub fn get_constant_pool(&self) -> &ConstantPool {
+        &self.constant_pool
+    }
+    pub fn get_methods(&self) -> &[MethodInfo] {
+        &self.method_pool.get_methods()
     }
 }

@@ -6,6 +6,7 @@
 extern crate alloc;
 pub mod base_types;
 pub mod class_loader;
+pub mod class_runner;
 //pub mod virtual_machine;
 
 //use crate::class_loader::class::Class;
@@ -32,7 +33,7 @@ mod tests {
         //trace!("{:#X?}", main_class_data);
         let main_class_obj = Class::new(main_class_data);
 
-        println!("{:#x?}", main_class_obj);
+        println!("{:#?}", main_class_obj);
         //let mut virtual_machine = virtual_machine::VirtualMachine::new(main_class_obj);
         //virtual_machine.run();
         Ok(())

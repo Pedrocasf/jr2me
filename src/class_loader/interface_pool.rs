@@ -1,7 +1,7 @@
 #[derive(Debug, Clone)]
 pub struct InterfacePool {
     size: u16,
-    interfaces: Vec<u16>,
+    interfaces: Box<[u16]>,
 }
 impl InterfacePool {
     pub fn new(data: &[u8]) -> (InterfacePool, usize) {
@@ -14,6 +14,7 @@ impl InterfacePool {
                 ));
             }
         }
+        let interfaces = interfaces.into_boxed_slice();
         (InterfacePool { size, interfaces }, (size as usize * 2) + 2)
     }
 }

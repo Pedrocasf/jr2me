@@ -1,8 +1,8 @@
-use super::{Attributes, ConstantPool};
+use super::{Attributes, CodeAttribute, ConstantPool};
 #[derive(Debug, Clone)]
 pub struct AttributePool {
     size: u16,
-    info: Vec<Attributes>,
+    info: Box<[Attributes]>,
 }
 impl AttributePool {
     pub fn new(data: &[u8], const_pool: &ConstantPool) -> (AttributePool, u32) {
@@ -14,6 +14,19 @@ impl AttributePool {
             length += sz;
             info.push(attr);
         }
+        let info = info.into_boxed_slice();
         (AttributePool { size, info }, length as u32)
+    }
+    pub fn get_attribute_code(&self) -> Vec<CodeAttribute> {
+        self.info
+            .iter()
+            .filter_map(|attr| {
+                if let Attributes::Code(code_attribute) = attr.clone() {
+                    Some(code_attribute)
+                } else {
+                    None
+                }
+            })
+            .collect()
     }
 }

@@ -42,6 +42,72 @@ impl ConstantPool {
             );
         }
     }
+    pub fn get_method_ref_of_index(&self, index: u16) -> (u16, u16) {
+        if let BaseTypes::JMethodRef(class, name_type) = self.pool[index as usize].clone() {
+            return (class, name_type);
+        } else {
+            panic!(
+                "Constant Pool item of index {:} is not a valid JMethodRef",
+                index
+            );
+        }
+    }
+    pub fn get_class_ref_of_index(&self, index: u16) -> u16 {
+        if let BaseTypes::JClassRef(class) = self.pool[index as usize].clone() {
+            return class;
+        } else {
+            panic!(
+                "Constant Pool item of index {:} is not a valid JClassRef",
+                index
+            );
+        }
+    }
+    pub fn get_name_type_descriptor_of_index(&self, index: u16) -> (u16, u16) {
+        if let BaseTypes::JNameTypeDescriptor(class, name_type) = self.pool[index as usize].clone()
+        {
+            return (class, name_type);
+        } else {
+            panic!(
+                "Constant Pool item of index {:} is not a valid JNmaeTypeDescriptor",
+                index
+            );
+        }
+    }
+    pub fn get_field_ref_of_index(&self, index: u16) -> (u16, u16) {
+        if let BaseTypes::JFieldRef(class, name_type) = self.pool[index as usize].clone() {
+            return (class, name_type);
+        } else {
+            panic!(
+                "Constant Pool item of index {:} is not a valid JFieldRef",
+                index
+            );
+        }
+    }
+    pub fn solve_method_ref_of_index(&self, index: u16) -> (String, String, String) {
+        let (class_idx, name_type_idx) = self.get_method_ref_of_index(index);
+        let class_name_idx = self.get_class_ref_of_index(class_idx);
+        let class_name = self.get_string_of_index(class_name_idx);
+        let (method_name_idx, method_type_idx) =
+            self.get_name_type_descriptor_of_index(name_type_idx);
+        let method_name = self.get_string_of_index(method_name_idx);
+        let method_type = self.get_string_of_index(method_type_idx);
+        return (class_name, method_name, method_type);
+    }
+    pub fn solve_class_ref(&self, index: u16) -> String {
+        let class_name_idx = self.get_class_ref_of_index(index);
+        let class_name = self.get_string_of_index(class_name_idx);
+        return class_name;
+    }
+    pub fn solve_field_ref_of_index(&self, index: u16) -> (String, String, String) {
+        let (field_idx, name_type_idx) = self.get_field_ref_of_index(index);
+        let class_name_idx = self.get_class_ref_of_index(field_idx);
+        let class_name = self.get_string_of_index(class_name_idx);
+        let (field_name_idx, field_type_idx) =
+            self.get_name_type_descriptor_of_index(name_type_idx);
+        let field_name = self.get_string_of_index(field_name_idx);
+        let field_type = self.get_string_of_index(field_type_idx);
+        return (class_name, field_name, field_type);
+    }
 }
 impl Debug for ConstantPool {
     fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
