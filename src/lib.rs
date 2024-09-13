@@ -7,6 +7,7 @@ extern crate alloc;
 pub mod base_types;
 pub mod class_loader;
 pub mod class_runner;
+pub mod linked_classes;
 //pub mod virtual_machine;
 
 //use crate::class_loader::class::Class;
@@ -28,14 +29,20 @@ mod tests {
         let main_class_path = &"classes/HelloMIDlet/HelloMIDlet.class";
         //#[cfg(feature = "log")]
         //trace!("{:}", main_class_path);
-        let main_class_data = std::fs::read(main_class_path).expect("CLASS FILE NOT FOUND");
+        let main_class_data = fs::read(main_class_path).expect("CLASS FILE NOT FOUND");
         //#[cfg(feature = "log")]
         //trace!("{:#X?}", main_class_data);
         let main_class_obj = Class::new(main_class_data);
 
         println!("{:#?}", main_class_obj);
         let mut runnable = RunnableClass::new(&main_class_obj);
-        runnable.run_method(&"<init>".to_owned(), &"()V".to_owned(), (&main_class_obj).get_constant_pool(), main_class_obj.get_class_idx(),  None);
+        runnable.run_method(
+            &"<init>".to_owned(),
+            &"()V".to_owned(),
+            (&main_class_obj).get_constant_pool(),
+            main_class_obj.get_class_idx(),
+            None,
+        );
         //let mut virtual_machine = virtual_machine::VirtualMachine::new(main_class_obj);
         //virtual_machine.run();
         Ok(())
