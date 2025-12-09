@@ -1,4 +1,4 @@
-#![feature(box_into_inner)]
+    #![feature(box_into_inner)]
 #![feature(auto_traits)]
 #![cfg_attr(not(feature = "std"), no_std)]
 #![cfg_attr(not(feature = "std"), feature(alloc))]
@@ -38,6 +38,13 @@ mod tests {
         let mut runnable = RunnableClass::new(&main_class_obj);
         runnable.run_method(
             &"<init>".to_owned(),
+            &"()V".to_owned(),
+            (&main_class_obj).get_constant_pool(),
+            main_class_obj.get_class_idx(),
+            None,
+        );
+        runnable.run_method(
+            &"startApp".to_owned(),
             &"()V".to_owned(),
             (&main_class_obj).get_constant_pool(),
             main_class_obj.get_class_idx(),

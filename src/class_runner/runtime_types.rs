@@ -18,7 +18,7 @@ pub enum RuntimeTypes {
     RInt(u32),
     RFloat(f32),
     RReference(u32),
-    RTRetrunAddress(u32),
+    RTReturnAddress(u32),
     RLong(u64),
     RDouble(f64),
 }
@@ -60,7 +60,7 @@ impl RuntimeTypes {
                 false,
             ),
             TReturnAddress => (
-                RTRetrunAddress(u32::from_be_bytes(
+                RTReturnAddress(u32::from_be_bytes(
                     d[0..4].try_into().expect("Not enough bytes"),
                 )),
                 false,
